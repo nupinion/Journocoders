@@ -37,7 +37,6 @@ for mid in message_ids:
 	#connect to recipient
 	cursor.execute('select rvalue,rtype from recipientinfo where recipientinfo.mid = '+ str(mid) +';')
 	recipients = [[i[0],i[1]] for i in cursor.fetchall()] 
-	print "the recipients"
 	all_recipients = []
 	for curr_recipient in recipients:
 		tmp = dict()
@@ -63,8 +62,9 @@ for mid in message_ids:
 	with open("dump.jsonl", "a") as myfile:
 		myfile.write(line1 + "\n")
 		myfile.write(json.dumps(line2) + "\n")
-	if mcount % 50000 == 0:
-		'curl -s -XPOST http://127.0.0.1:9200/enron/emails/_bulk --data-binary "@dump.jsonl"'
+	print "mcount " + str(mcount)
+	if mcount % 500 == 0:
+		os.system('curl -s -XPOST http://127.0.0.1:9200/enron/emails/_bulk --data-binary "@dump.jsonl"');
 		os.system("rm dump.jsonl")
 		#read to es via bulk load
 		#delete dump.jsonl
@@ -72,15 +72,8 @@ for mid in message_ids:
 	#check for %%50000 for bulk load to es
 	#and empty jsonl
 
-
-
-print "Database version : %s " % data
-
-
-
-
-{ "index":  {}}
-{ "webTitle": "Denise", "description": "Xifara"}
+os.system('curl -s -XPOST http://127.0.0.1:9200/enron/emails/_bulk --data-binary "@dump.jsonl"');
+os.system("rm dump.jsonl")
 
 # disconnect from server
 db.close()
