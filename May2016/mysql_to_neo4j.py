@@ -59,6 +59,7 @@ mcount = 0;
 # Iterate over emails
 for mid in message_ids:
 	mcount += 1
+	print str(mcount) + " of " + str(len(message_ids))
 	########################################################################
 	cursor.execute("select * from message where mid = '" + str(mid) +"'")
 	curr_message = cursor.fetchall()[0];
