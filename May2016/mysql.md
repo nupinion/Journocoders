@@ -37,7 +37,7 @@ select sender from message group_by sender limit 10;
 SELECT DISTINCT(sender) AS sender FROM message ORDER BY date DESC;
 SELECT COUNT(DISTINCT sender) FROM message;
 # get 10 most popular senders
-SELECT COUNT(*) AS sender, sender FROM message GROUP BY sender order by sender desc limit 10;
+SELECT COUNT(*) AS sender, sender FROM message GROUP BY sender ORDER BY sender DESC LIMIT 10;
 
 # And what about the recipients?
 
