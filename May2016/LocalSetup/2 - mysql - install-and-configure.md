@@ -54,4 +54,10 @@ You can exit by running `exit;`
 Load the `mysql -u root -p enron < <PATH_TO_FILE>enron-mysqldump_v5.sql`
 
 
+### PhpMyAdmin
+
+https://www.liquidweb.com/kb/how-to-install-and-configure-phpmyadmin-on-ubuntu-14-04/
+
+
+
 
