@@ -74,3 +74,12 @@ match (p:Person)-[]->()-[s:sent]->(e:Email)<-[r:received]-()<-[]-(p) return p li
 ```
 
 Congratulations! You've cracked it!
+
+
+Which pair of individuals email each other the most? Break down the following query.... :)
+
+```
+match (ea1:EmailAddress)-[s1:sent]->(e1:Email)<-[r1:received]-(ea2:EmailAddress)-[s2:sent]->(e2:Email)<-[r2:received]-(ea1)
+with ea1.address + " - " + ea2.address as concat_string
+return distinct concat_string, count(concat_string) as ct order by ct desc limit 30;
+```
