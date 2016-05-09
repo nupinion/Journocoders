@@ -10,4 +10,6 @@ The notes are intended to provide both a superficial overview and more advanced 
 
 We have split out the notes into two folders: `LocalSetup` and `Tutorial`. The first is purely to inform you about how to setup the databases and data on a local machine and holds all the data-conversion scripts. The latter is to follow the Tutorials as run for the Journocoders workshop.
 
+The data we will use is the Enron corpus, described <a href="http://www.ahschulz.de/enron-email-data/">here</a>.
+
 All comments for improvements welcome.
