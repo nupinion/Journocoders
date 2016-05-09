@@ -47,6 +47,12 @@ Lets create a new database to hold all the Enron data:
 mysql> CREATE DATABASE enron;
 ```
 
+```bash
+mysql> CREATE USER 'journocoders'@'localhost' IDENTIFIED BY 'hellouniverse';
+mysql> GRANT SELECT ON enron.* TO 'journocoders'@'localhost';
+mysql> FLUSH PRIVILEGES;
+```
+
 This should do it! Now to proceed we will exit MySQL and load the data.
 
 You can exit by running `exit;`
@@ -54,10 +60,14 @@ You can exit by running `exit;`
 Load the `mysql -u root -p enron < <PATH_TO_FILE>enron-mysqldump_v5.sql`
 
 
-### PhpMyAdmin
+### Install PhpMyAdmin
 
 https://www.liquidweb.com/kb/how-to-install-and-configure-phpmyadmin-on-ubuntu-14-04/
 
+```bash
+sudo apt-get -y install phpmyadmin
+```
 
+URL: http://54.171.120.83/phpmyadmin
 
 

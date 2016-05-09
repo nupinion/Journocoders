@@ -4,7 +4,21 @@ First some notes on installing ElasticSearch (2.1.1), Kibana (4.3.1), and Sense.
 
 Great read-through: https://www.elastic.co/guide/en/elasticsearch/guide/current/getting-started.html
 
--
+
+### Install Java
+
+Install Java
+
+~~~bash
+$ sudo apt-add-repository ppa:webupd8team/java
+$ sudo apt-get update
+$ sudo apt-get install oracle-java7-installer
+
+$ java -version
+~~~
+
+
+
 ### Installing ElasticSearch (2.1.1)
 
 First download and unpack ElasticSearch:
