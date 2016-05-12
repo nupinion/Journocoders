@@ -1,6 +1,6 @@
 # Neo4J Tutorial
 
-Neo4j is a graph database -- the filesystem in which the data is kept, includes graph information. This means that in the files there are nodes and relationships/edges. So, we could denote information with something like: `(sender)-[sends]->(email)<-[receives]-(recipient)`. 
+Neo4j is a graph database: the filesystem in which the data is kept, includes graph information. This means that in the files there are nodes and relationships/edges. So, we could denote information with something like: `(sender)-[sends]->(email)<-[receives]-(recipient)`. 
 
 This facilitates querying the filesystem with graph questions like: "Which people email each other?" and "Who sends emails between their own accounts?".
 
@@ -8,26 +8,30 @@ Neo4j is the name of the database. The language used to query it is called Cyphe
 
 To access Neo4j, we will interact with its web interface. The interface allows us to both visualise the graph, and to query it with cypher.
 
-In your browser, go to <a href="xxxx:7474">xxxx:7474</a>. You're ready to start exploring!
+In your browser, go to <a href="http://journocoders.nupinion.com:7474/browser/">http://journocoders.nupinion.com:7474/browser/</a>. You're ready to start exploring!
 
 ### Simple Queries
 
 Let's take a quick look at the graph:
 
 ```bash
-match (n)-[r]->(m)-[u]->(p) return n,r,m,u,p limit 20;
+MATCH (n)-[r]->(m)-[u]->(p) RETURN n,r,m,u,p LIMIT 20;
 ```
 
 How many nodes are in our graph?
 
 ```bash
-match (n) return count(n);
+MATCH (n) RETURN COUNT(n);
 ```
 
 What types of nodes are they?
 
 ```bash
-match (n) return distinct labels(n), count(n);
+MATCH (n) RETURN DISTINCT LABELS(n), COUNT(n);
+```
+
+```bash
+MATCH ()-[r]->() RETURN DISTINCT TYPE(r), COUNT(r);
 ```
 
 So, there are people, email addresses and emails in our graph. 
@@ -46,31 +50,31 @@ OK, here we go:
 Find email addresses that send emails:
 
 ```bash
-match (ea1:EmailAddress)-[s:sent]->(e:Email) return ea1 limit 10;
+MATCH (ea:EmailAddress)-[s:Sent]->(e:Email) RETURN ea, s, e LIMIT 20;
 ```
 
 Also find email addresses that receive emails:
 
 ```bash
-match (ea1:EmailAddress)-[s:sent]->(e:Email)<-[r:received]-(ea2:EmailAddress) return ea1,ea2 limit 10;
+MATCH (ea1:EmailAddress)-[s:Sent]->(e:Email)<-[r:Received]-(ea2:EmailAddress) RETURN ea1, s, r, ea2 LIMIT 20;
 ```
 
 Find the person that these email addresses belong to:
 
 ```bash
-match (p1:Person)-[a1:has_address]->(ea1:EmailAddress)-[s:sent]->(e:Email)<-[r:received]-(ea2:EmailAddress)<-[a2:has_address]-(p2:Person) return p1,p2 limit 10;
+MATCH (p1:Person)-[a1:has_address]->(ea1:EmailAddress)-[s:Sent]->(e:Email)<-[r:Received]-(ea2:EmailAddress)<-[a2:has_address]-(p2:Person) RETURN p1,a1,ea1,s,e,r,ea2,a2,p2 LIMIT 20;
 ```
 
-Now, limit the query so that `p1 = p2 = p`, i.e. a person emails themself:
+Since we are dealing with fraud it makes sense to look at suspicious behaviour. So how about we look at people who actually email themselves (perhaps on a different email address). To do this, limit the query so that `p1 = p2 = p`, i.e. a person emails themself:
 
 ```bash
-match (p:Person)-[a1:has_address]->(ea1:EmailAddress)-[s:sent]->(e:Email)<-[r:received]-(ea2:EmailAddress)<-[a2:has_address]-(p) return p limit 10;
+MATCH (p:Person)-[a1:has_address]->(ea1:EmailAddress)-[s:Sent]->(e:Email)<-[r:Received]-(ea2:EmailAddress)<-[a2:has_address]-(p) RETURN p,a1,ea1,s,e,r,ea2,a2 LIMIT 20;
 ```
 
 Simplified:
 
 ```bash
-match (p:Person)-[]->()-[s:sent]->(e:Email)<-[r:received]-()<-[]-(p) return p limit 10;
+MATCH (p:Person)-[]->()-[s:Sent]->(e:Email)<-[r:Received]-()<-[]-(p) RETURN p LIMIT 20;
 ```
 
 Congratulations! You've cracked it!
@@ -79,7 +83,6 @@ Congratulations! You've cracked it!
 Which pair of individuals email each other the most? Break down the following query.... :)
 
 ```bash
-match (ea1:EmailAddress)-[s1:sent]->(e1:Email)<-[r1:received]-(ea2:EmailAddress)-[s2:sent]->(e2:Email)<-[r2:received]-(ea1)
-with ea1.address + " - " + ea2.address as concat_string
-return distinct concat_string, count(concat_string) as ct order by ct desc limit 30;
+MATCH (ea1:EmailAddress)-[s1:Sent]->(e1:Email)<-[r1:Received]-(ea2:EmailAddress)-[s2:Sent]->(e2:Email)<-[r2:Received]-(ea1) WITH ea1.address + " - " + ea2.address AS concat_string RETURN DISTINCT concat_string, COUNT(concat_string) AS ct order BY ct DESC LIMIT 30;
 ```
+

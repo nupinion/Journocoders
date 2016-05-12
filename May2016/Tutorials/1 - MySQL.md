@@ -20,7 +20,7 @@ We'll take a closer look at how to answer these questions using SQL -- the query
 
 To access MySQL, we will use the web interface <b>phpMyAdmin</b>. That allows us to write queries and interact with the data directly from the browser, without needing to access the server via the terminal. 
 
-In your browsers, navigate to: http://54.171.70.156/phpmyadmin/
+In your browsers, navigate to: http://journocoders.nupinion.com/phpmyadmin/
 
 You can login with the following credentials:<br>
 username: <strong>journocoders<br></strong>
