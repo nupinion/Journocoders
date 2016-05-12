@@ -75,6 +75,16 @@ print '\nDONE! Time elapsed: {} seconds\n\n'.format(time.time()-t0)
 
 
 
+# ---------------------------------------------
+# RECIPIENTS
+# ---------------------------------------------
+
+# Get all unique recipient-email addresses, filter out the employee ones and add them as nodes.
+
+
+
+
+
 
 
 
@@ -90,7 +100,7 @@ messages = cursor.fetchall()
 
 
 t0 = time.time()
-for e,curr_message in enumerate(messages[10000:15000]):
+for e,curr_message in enumerate(messages[30000:40000]):
     if curr_message[0] >= 0:
         #
         message = [ str(col).replace('\\','') for col in curr_message ]
@@ -141,11 +151,22 @@ recipients_df = pd.DataFrame.from_records(data=recipients_array, index=recipient
 recipients = recipients_array = None
 print recipients_df.head()
 
+
+
+
+
+
 # Loop over all employees and add them as nodes.
+start = 28000
+finish = 30000
 t0 = time.time()
+n_nodes = n_edges = 0
+
+print '*** PROCESSING {} ROWS...'.format(recipients_df[(recipients_df.mid >= start) & (recipients_df.mid < finish)].shape[0])
+
 for e,i in enumerate(recipients_df.index):
     #
-    if recipients_df.ix[i].mid < 12413:
+    if recipients_df.ix[i].mid >= start and recipients_df.ix[i].mid < finish:
         #
         mid = str(recipients_df.ix[i].mid)
         rtype = str(recipients_df.ix[i].rtype)
@@ -156,19 +177,24 @@ for e,i in enumerate(recipients_df.index):
         numMatches = len([ m for m in matches ])
         # If the receiver does not exist, create the sender and the message together.
         if numMatches == 0:
+            n_nodes += 1
+            n_edges += 1
+            # Create both the node and the relationship
             _ = session.run("MATCH (m:Email) WHERE m.mid=" + mid + " CREATE (m)<-[r:Received {type:'" + rtype + "'}]-(e:EmailAddress {address:'" + rvalue + "'})").consume()
             # _ = session.run("MATCH (m:Email) WHERE m.mid=" + mid + " CREATE (m)-[r:To {type:'" + rtype + "'}]->(e:EmailAddress {address:'" + rvalue + "'})").consume()
         else:
-            # Create a node for the message object.
+            n_edges += 1
+            # Create the relationship
             _ = session.run("MATCH (m:Email), (e:EmailAddress) WHERE m.mid=" + mid + " AND e.address='" + rvalue + "' CREATE (m)<-[r:Received {type:'" + rtype + "'}]-(e)").consume()
             # _ = session.run("MATCH (m:Email), (e:EmailAddress) WHERE m.mid=" + mid + " AND e.address='" + rvalue + "' CREATE (m)-[r:To {type:'" + rtype + "'}]->(e)").consume()
         # Show results...
-        if (e+1) % 500 == 0:
+        if (e+1) % 200 == 0:
             t1 = time.time()
             mins = (t1-t0) // 60
             secs = (t1-t0) % 60
-            print 'Added {} recipients ({} minutes and {} seconds).'.format(e+1, mins, secs)
-            print '\tLast added mid was {}\n'.format(mid)
+            print '{} -- Added {} nodes, {} edges ({} minutes and {} seconds).'.format(n_nodes, n_edges, mins, secs)
+            print '\t{} -- Last added mid was {}\n'.format(t1, mid)
+            n_nodes = n_edges = 0
     
     
 print '\nDONE! Time elapsed: {} seconds'.format(time.time()-t0)
