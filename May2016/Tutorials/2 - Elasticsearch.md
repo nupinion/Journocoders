@@ -111,7 +111,7 @@ GET _search
   "query": {
 
     "filtered":{
-    
+
       "filter":{
         "range":{
           "date": {
@@ -120,26 +120,31 @@ GET _search
           }
         }
       },
-    
+
       "query": {
- 
-        "query_string" : {
-          "fields" : ["body.stemming","subject.stemming"],
-          "query" : "look* AND job"
+        "bool": {
+          "must": [
+            {
+              "query_string" : {
+                "fields" : ["body.stemming","subject.stemming"],
+                "query" : "look* AND job"
+              }
+            },
+            {
+              "query_string" : {
+                "fields" : ["sender"],
+                "query" : "@enron"
+              }
+            }
+          ]
         }
-      },
-      "query": {
- 
-        "query_string" : {
-          "fields" : ["sender"],
-          "query" : "@enron"
-        }
+        
       }
-    
+
     }
   },
   "size":20,
-  "fields":["sender"]
+  "fields":["sender","body","subject"]
 } 
 ```
 
