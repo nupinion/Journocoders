@@ -24,7 +24,7 @@ In your browsers, navigate to: http://journocoders.nupinion.com/phpmyadmin/
 
 You can login with the following credentials:<br>
 username: <strong>journocoders<br></strong>
-password: <strong>helloworld</strong>
+password: <strong>hellouniverse</strong>
 
 Once you have logged in, navigate to the <b>SQL</b> tab. This is where we can write our queries (top), and view the output (bottom).
 
