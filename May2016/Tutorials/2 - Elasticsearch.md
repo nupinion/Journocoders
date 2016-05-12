@@ -20,11 +20,11 @@ GET _search
 
 ```
 
-If you click on that first line a play button should appear. Click on the play button to execute. 
+If you click on that first line a play button should appear. Click on the play button to execute. The results of the query will appear on the right.
 
 By default, Elasticsearch will only return the first 10 documents. In a new line, paste `GET _cat/indices`. This shows you details of what documents and how many are in the database. 
 
-To return some more documents from the first query, do:
+To return some more documents from the first query (please don't return too many!), do:
 
 ```
 GET _search
@@ -36,7 +36,7 @@ GET _search
 }
 ```
 
-Let's limit the search. Imagine we want to find employees that within a time period (say the last two months), were thinking of getting a new job.
+Let's limit the search. Imagine we want to find employees that within a time period (say the last two months), were thinking of getting a new job. We'll try and get to addressing this question in steps:
 
 Search for "looking for a new job" in the body of the email
 
